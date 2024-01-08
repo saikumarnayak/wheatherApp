@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    @import url("https://fonts.googleapis.com/css2?family=Economica&family=Grape+Nuts&family=Roboto:wght@100;300;400;700;900&display=swap");
+
+* {
+  margin: 0%;
+  padding: 0;
+  font-family: "Roboto", sans-serif;
+}
+
+.container {
+  width: 100%;
+  height: 100vh;
+  background-color:#01161E;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.weather {
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  color: white;
+}
+
+.weather > div {
+  margin: 0.625rem;
+}
+
+.weather1 {
+  font-size: 4rem;
+}
+
+.weather p {
+  font-size: 2rem;
+}
+.weather span {
+  font-size: 0.75rem;
+}
+
+.weather3 span {
+  margin: 0.3rem;
+}
+
+.weather3 img {
+  width: 2rem;
+}
+nav {
+  height: 100px;
+  padding: 1rem 0;
+  position: absolute;
+  bottom: 0%;
+  width: 100%;
+  background-color: rgba(180, 177, 177, 0.202);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+nav form {
+  width: 70%;
+  grid-template-columns: 5fr 1fr;
+  display: grid;
+}
+
+.searchField {
+  font-size: 1.1rem;
+  outline: none;
+  color: white;
+  background-color: transparent;
+  padding: 1rem 0;
+  border: none;
+  border-bottom: 2px solid white;
+  width: 98%;
+}
+
+nav form button {
+  background-color:#4ECDC4;
+  font-size: 1.1rem;
+  color: white;
+  outline: none;
+  border: none;
+  cursor: pointer;}
+</style>
+<body>
+    <div class="container">
+        <div class="weather">
+            <div class="temp">20</div>
+            <div class="temp_location">
+                <p>Location name</p>
+                <span>Date and time</span>
+            </div>
+
+            <div class="weather_condition">
+                <p><img src="" alt=""></p>
+                <span>Condition</span>
+            </div>
+        </div>
+    </div>
+
+    <nav>
+        <form>
+            <input type="text" class="searchField">
+            <button type="submit">Search</button>
+        </form>
+    </nav>
+</body>
+<script >
+    // Selecting DOM elements
+const temperatureField = document.querySelector(".temp");
+const cityField = document.querySelector(".temp_location p");
+const dateField = document.querySelector(".temp_location span");
+const emojiField = document.querySelector(".weather_condition img");
+const weatherField = document.querySelector(".weather_condition span");
+const searchField = document.querySelector(".searchField");
+const form = document.querySelector("form");
+
+let cityName = 'Pune'
+
+form.addEventListener('submit', function (event) {
+    event.preventDefault()
+    const cityName = searchField.value
+    getWeatherInfo(cityName)
+})
+
+async function getWeatherInfo(cityName) {
+        const response = await fetch(`http://api.weatherapi.com/v1/current.json?key=3d04e5daa68c432ba46130322230211&q=${cityName}&aqi=no`);
+        const weatherData = await response.json();
+        console.log(weatherData);
+
+        let temp = weatherData.current.temp_c
+        let name = weatherData.location.name
+        let condition = weatherData.current.condition.text
+        let url = weatherData.current.condition.icon
+        let date = weatherData.current.last_updated
+
+        console.log(temp, name, condition, url, date)
+
+        temperatureField.innerText = temp;
+        cityField.innerText = name
+        dateField.innerText = date
+        emojiField.src = url
+        weatherField.innerText = condition
+}
+</script>
+</html>
